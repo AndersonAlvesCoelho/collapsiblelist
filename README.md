@@ -1,18 +1,17 @@
 # react-native-collapsible-list
 
 A ReactNative collapsible list component
-
-![react-native-collapsible-list example](/demo.gif)
+> [react-native-collapsible-list](https://github.com/hamidhadi/react-native-collapsible-list)
 
 ## Installation
 
-You can install this package via `yarn`:
+Você pode instalar este pacote via `yarn`:
 
 ```
 yarn add react-native-collapsible-list
 ```
 
-or `npm`
+ou `npm`
 
 ```bash
 npm install react-native-collapsible-list --save
@@ -21,75 +20,176 @@ npm install react-native-collapsible-list --save
 ## Basic Usage
 
 ```js
-import React, { Component } from "react";
-import { Text, View } from "react-native";
+import React from "react";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import CollapsibleList from "react-native-collapsible-list";
 
-export default class App extends Component {
-  render() {
-    return (
+const App = () => {
+  return (
+    <ScrollView style={styles.container}>
       <View style={styles.container}>
         <CollapsibleList
-          numberOfVisibleItems={1}
+          numberOfVisibleItems={0}
           wrapperStyle={styles.wrapperCollapsibleList}
+          buttonPosition={"top"}
           buttonContent={
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>{buttonText}</Text>
+            <View style={styles.topic}>
+              <Text style={styles.title}>Vinai</Text>
             </View>
           }
         >
-          <View style={styles.collapsibleItem}>
-            <Text>Hello Collapsable List :)</Text>
-          </View>
-          <View style={styles.collapsibleItem}>
-            <Text>Collapsable List Item</Text>
-          </View>
-          <View style={styles.collapsibleItem}>
-            <Text>Another Collapsable List Item</Text>
-          </View>
+          <Text style={styles.text}>
+            O incentivo ao avanço tecnológico, assim como o acompanhamento das
+            preferências de consumo promove a alavancagem do retorno esperado a
+            longo prazo.
+          </Text>
         </CollapsibleList>
       </View>
-    );
-  }
-}
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.1)"
+    padding: 10,
+    backgroundColor: "#073739",
   },
   wrapperCollapsibleList: {
     flex: 1,
-    marginTop: 20,
+    marginBottom: 5,
     overflow: "hidden",
     backgroundColor: "#FFF",
-    borderRadius: 5
+    borderRadius: 5,
   },
-  collapsibleItem: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: "#CCC",
-    padding: 10
-  }
+  topic: {
+    flex: 1,
+    justifyContent: "flex-start",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  title: {
+    color: "#11807c",
+    marginLeft: 5,
+    width: "100%",
+    alignItems: "center",
+    fontSize: 17,
+    borderBottomWidth: 0.3,
+    borderColor: "#11807c",
+    paddingBottom: 2,
+  },
+  text: {
+    margin: 5,
+    color: "#000",
+    fontSize: 15,
+  },
 });
+
+export default App;
 ```
 
-## Properties
+##  Advanced Use
 
-| Prop                 | Type                                                                                                         | Default                                                                                | Description                                                                                                                               |
-| :------------------- | :----------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| animationConfig      | [ReactNative.LayoutAnimationConfig](https://facebook.github.io/react-native/docs/layoutanimation#parameters) | `{duration: 700, update: { type: "spring", springDamping: 0.7, property: "scaleXY" }}` | Overrides each property of the default value if specified                                                                                 |
-| buttonContent        | `React.ReactNode`                                                                                            | `null`                                                                                 | Content of collapse button                                                                                                                |
-| buttonPosition       | `string` (`top` or `bottom`)                                                                                 | `bottom`                                                                               | Position of collapse button                                                                                                               |
-| numberOfVisibleItems | `number`                                                                                                     | `1`                                                                                    | Number of visible items when lis is not collapsed                                                                                         |
-| onToggle             | `function`                                                                                                   | `null`                                                                                 | Callback function for toggling the list with collapsed parameter which can be `true`(list is collapsed) or `false`(list is not collapsed) |
-| wrapperStyle         | `ReactNative.ViewStyle`                                                                                      | `null`                                                                                 | The style of the list wrapper                                                                                                             |
+```js
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, ScrollView } from 'react-native';
+import CollapsibleList from 'react-native-collapsible-list';
+import { MaterialIcons } from '@expo/vector-icons';
 
-## Contribution
+const App = () => {
+  const [collapsedTopic, setCollapsedTopic] = useState('arrow-drop-down');
+  const [collapsedCaption, setCollapsedCaption] = useState('add');
 
-You can fork the repository, improve or fix some part of it and then send the pull requests back if you want to see them here. I really appreciate that. :wink:
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.container}>
+        <CollapsibleList
+          numberOfVisibleItems={0}
+          wrapperStyle={styles.wrapperCollapsibleList}
+          buttonPosition={'top'}
+          onToggle={(collapsed) =>
+            collapsed
+              ? setCollapsedTopic('arrow-drop-up')
+              : setCollapsedTopic('arrow-drop-down')
+          }
+          buttonContent={
+            <View style={styles.topic}>
+              <Text style={styles.title}>Vinai</Text>
+              <MaterialIcons name={collapsedTopic} size={35} color="#000" />
+            </View>
+          }>
+          <CollapsibleList
+            numberOfVisibleItems={0}
+            wrapperStyle={styles.wrapperCollapsibleList}
+            buttonPosition={'top'}
+            onToggle={(collapsed) =>
+              collapsed
+                ? setCollapsedCaption('minimize')
+                : setCollapsedCaption('add')
+            }
+            buttonContent={
+              <View style={styles.topic}>
+                <Text style={styles.subTitle}>Vinai da silva</Text>
+                <MaterialIcons name={collapsedCaption} size={20} color="#000" />
+              </View>
+            }>
+            <Text style={styles.text}>
+              O incentivo ao avanço tecnológico, assim como o acompanhamento das
+              preferências de consumo promove a alavancagem do retorno esperado
+              a longo prazo.
+            </Text>
+          </CollapsibleList>
+        </CollapsibleList>
+      </View>
+    </ScrollView>
+  );
+};
 
-## License
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#073739',
+  },
+  wrapperCollapsibleList: {
+    flex: 1,
+    marginBottom: 5,
+    overflow: 'hidden',
+    backgroundColor: '#FFF',
+    borderRadius: 5,
+  },
+  topic: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
+    color: '#11807c',
+    marginLeft: 5,
+    width: '100%',
+    alignItems: 'center',
+    fontSize: 17,
+    borderBottomWidth: 0.3,
+    borderColor: '#11807c',
+    paddingBottom: 2,
+  },
+  text: {
+    margin: 5,
+    color: '#000',
+    fontSize: 15,
+  },
+  subTitle: {
+    color: '#000',
+    marginTop: 5,
+    textAlign: 'justify',
+    width: '100%',
+    alignItems: 'center',
+    fontSize: 20,
+    paddingBottom: 2,
+  },
+});
 
-Licensed under the [MIT](https://github.com/hamidhadi/react-native-collapsible-list/blob/master/LICENSE).
+export default App;
+```
+
